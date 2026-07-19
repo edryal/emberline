@@ -18,6 +18,9 @@ int main(void) {
     Vector3 playerSize = {3.0f, 3.0f, 3.0f};
     int movementSpeed = 5;
 
+    RayCollision ray_collision = {};
+    ray_collision.distance = 200.0f; 
+
     Camera3D camera = {};
     camera.up = {0.0f, 1.0f, 0.0f};
     camera.fovy = 60.0f;
@@ -31,7 +34,7 @@ int main(void) {
     DisableCursor();
 
     // ESC is the default, but we'll most probably need that key for closing menus
-    SetExitKey(KEY_NULL);
+    SetExitKey(KEY_ESCAPE);
 
     while (!WindowShouldClose()) {
         // GetScreenWidth() returns the current windowWidth, not the monitor max windowWidth
