@@ -1,7 +1,7 @@
 #include "raylib.h"
 
 int main(void) {
-    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_MSAA_4X_HINT);
 
     int launchScreenWidth = 1000;
     int launchScreenHeight = 800;
@@ -11,23 +11,21 @@ int main(void) {
     int minGameHeight = 400;
     SetWindowMinSize(minGameWidth, minGameHeight);
 
-    int maxGameWidth = GetScreenWidth();
-    int maxGameHeight = GetScreenHeight();
-    SetWindowMaxSize(maxGameWidth, maxGameHeight);
-
-    SetTargetFPS(60);
+    // Uncapped is like 3-4k fps, yeah better to cap it
+    SetTargetFPS(120);
 
     Vector3 playerPos = {0.0f, 1.0f, 0.0f};
+    Vector3 playerSize = {3.0f, 3.0f, 3.0f};
+    int movementSpeed = 5;
 
     Camera3D camera = {};
+    camera.up = {0.0f, 1.0f, 0.0f};
+    camera.fovy = 60.0f;
+    camera.projection = CAMERA_PERSPECTIVE;
 
     // behind and above the player
     camera.position = {playerPos.x, playerPos.y + 3.0f, playerPos.z - 8.0f};
     camera.target = playerPos;
-
-    camera.up = {0.0f, 1.0f, 0.0f};
-    camera.fovy = 60.0f;
-    camera.projection = CAMERA_PERSPECTIVE;
 
     // we want to move the camera with our mouse
     DisableCursor();
@@ -36,14 +34,23 @@ int main(void) {
     SetExitKey(KEY_NULL);
 
     while (!WindowShouldClose()) {
+        // GetScreenWidth() returns the current windowWidth, not the monitor max windowWidth
+        DrawFPS(GetScreenWidth() - 100, 10);
+
+        // TODO: once we add multiplayer, we'll need to have some kind of tick rate
+        // so that physics is consistent for everyone even on different framerates
+        //
+        // GetFrameTime is delta time since we're looping over frames not seconds
+        // we have to make sure that the speed is the same for people that play on
+        // 30 fps vs 60 fps, since more fps would mean faster movementSpeed overtime
         if (IsKeyDown(KEY_W))
-            playerPos.z -= 1 * GetFrameTime() * 5;
+            playerPos.z -= movementSpeed * GetFrameTime();
         if (IsKeyDown(KEY_A))
-            playerPos.x -= 1 * GetFrameTime() * 5;
+            playerPos.x -= movementSpeed * GetFrameTime();
         if (IsKeyDown(KEY_S))
-            playerPos.z += 1 * GetFrameTime() * 5;
+            playerPos.z += movementSpeed * GetFrameTime();
         if (IsKeyDown(KEY_D))
-            playerPos.x += 1 * GetFrameTime() * 5;
+            playerPos.x += movementSpeed * GetFrameTime();
 
         // CAMERA_THIRD_PERSON comes with wasd and move input handling by default
         // So instead of the camera following the player, we can make make the
@@ -58,6 +65,9 @@ int main(void) {
             ClearBackground(DARKPURPLE);
             BeginMode3D(camera);
             {
+                // enemy
+                DrawCubeV({}, playerSize, RED);
+                // player
                 DrawCube(playerPos, 2, 2, 2, WHITE);
                 DrawGrid(1000, 1.0f);
             }
