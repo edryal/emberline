@@ -9,7 +9,7 @@ BUILD_DIR="build"
 # ! : negation, so we check if the directory doesn't exist
 if [ ! -d "$BUILD_DIR" ]; then
     echo "No build directory found, configuring..."
-    cmake -B "$BUILD_DIR"
+    cmake -B "$BUILD_DIR" -DCMAKE_BUILD_TYPE=Debug
 fi
 
 cmake --build "$BUILD_DIR" --parallel
