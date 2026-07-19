@@ -1,0 +1,10 @@
+# Ignore clangd cache
+.cache/
+
+# Ignore build directory
+build/
+
+# Ignore Intellij IDEs configurations
+.idea/
+
+# Add your own directories to ignore based on the IDE you use
