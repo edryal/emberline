@@ -6,7 +6,10 @@ REM (clangd completion in WSL is handled separately by compile_flags.txt.)
 setlocal
 cd /d "%~dp0"
 
-set BUILD_DIR=build
+REM Separate from the Linux build dir on purpose - see run-linux.sh. An MSVC
+REM CMakeCache.txt and a gcc one can't share a directory, and WSL often builds
+REM from this same checkout.
+set BUILD_DIR=build-win
 
 REM Only configure when the build dir doesn't exist yet; re-running is fast
 REM anyway, but this keeps a plain build quick.

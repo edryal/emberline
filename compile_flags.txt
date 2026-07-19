@@ -1,0 +1,19 @@
+# clangd config for the Neovim (WSL) setup.
+#
+# Why this file exists:
+#   clangd runs inside WSL, so it can't use the compile_commands.json that
+#   Rider/MSVC generate on the Windows side (those reference cl.exe and C:\
+#   paths that don't exist in WSL). All clangd actually needs for completion is
+#   the raylib headers plus raylib's platform defines, so we hand them over
+#   directly here.
+#
+# Paths are relative to this file's directory (the repo root), so nothing here
+# is machine-specific and it works for anyone who checks the repo out. The
+# raylib headers live wherever FetchContent unpacked them, which means you need
+# to have run ./run-linux.sh (or configured build-linux/ by hand) once before
+# completion works. build-linux/ rather than build-win/ because clangd runs on
+# the WSL side.
+-std=c++17
+-Ibuild-linux/_deps/raylib-src/src
+-DPLATFORM_DESKTOP
+-DGRAPHICS_API_OPENGL_33
