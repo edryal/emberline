@@ -5,10 +5,10 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# On linux depending on the package you have installed, raylib might or
-# might not come with wayland support. So build it from source to be sure
-# that it will use wayland and not xwayland. If you don't know or don't care,
-# just leave this be, since raylib works with X11 by default.
+# Depending on how your system raylib was packaged, it might or might not
+# have Wayland support baked in. Building from source guarantees Wayland
+# (and X11 still works either way). If you don't know or don't care, leave
+# this off - X11/XWayland also works.
 option(USE_SYSTEM_RAYLIB "Use system raylib instead of building from source"
        OFF)
 
@@ -19,9 +19,8 @@ if (USE_SYSTEM_RAYLIB)
 else()
     message(STATUS "Building raylib from source with Wayland support")
 
-    # Flags to build raylib with wayland support
+    # Flags to build raylib with Wayland support
     set(GLFW_BUILD_WAYLAND ON CACHE BOOL "" FORCE)
-    set(GLFW_BUILD_X11 ON CACHE BOOL "" FORCE)
 
     include(FetchContent)
     FetchContent_Declare(
@@ -32,7 +31,7 @@ else()
     FetchContent_MakeAvailable(raylib)
 endif()
 
-# Replace `main` with ${PROJECT_NAME} later on,
-# but for now it's faster to type and understand `main`
+# Using `main` instead of ${PROJECT_NAME} for now, since it's quicker to
+# type and read while the project's still this small. Change it later.
 add_executable(main src/main.cpp)
 target_link_libraries(main raylib)

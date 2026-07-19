@@ -1,10 +1,9 @@
-# First time opening the project
-
+## First time opening the project
 Configure everything by running:
 ```bash
 cmake -B build
 ```
-This will generate the `compile_commands.json` and the `build/` directory.
+This generates `compile_commands.json` (for clangd) and the `build/` directory.
 
 Compile and link the application:
 ```bash
@@ -15,19 +14,29 @@ Run the application:
 ```bash
 ./build/main
 ```
+
 > [!TIP]
-> One-liner:
+> One-liner if you like to write stuff manually:
 > ```bash
 > cmake --build build && ./build/main
 > ```
 
-Or use the run script to configure, build and run:
+Or just use the run script to configure (if needed), build, and then run:
 ```bash
-.run-linux.sh
+./run-linux.sh
 ```
 
-# Build
+## Build
 
-By default `CMakeLists.txt` will build raylib from source with wayland flags. <br>
-Raylib is built with X11 support by default so you don't have to change anything. <br>
-Unless you want to use your own system raylib package, then set `USE_SYSTEM_RAYLIB` to `ON` in `CMakeLists.txt`.
+By default, `CMakeLists.txt` builds raylib from source (via `FetchContent`) with Wayland support enabled. X11 support is also built in alongside it, so nothing extra is needed on X11-only setups either.
+
+If you'd rather link against a system-installed raylib instead of building from source, configure with:
+```bash
+cmake -B build -DUSE_SYSTEM_RAYLIB=ON
+```
+Note: Wayland support then depends entirely on how your system's raylib package was built - not guaranteed.
+
+If you switch `USE_SYSTEM_RAYLIB` after already having a `build/` folder, wipe it first so the change actually takes effect:
+```bash
+rm -rf build
+```
