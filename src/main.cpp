@@ -36,17 +36,22 @@ int main(void) {
     SetExitKey(KEY_NULL);
 
     while (!WindowShouldClose()) {
-        if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D))
-            playerPos.x += 1 * GetFrameTime() * 5;
-        if (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A))
-            playerPos.x -= 1 * GetFrameTime() * 5;
-        if (IsKeyDown(KEY_UP) || IsKeyDown(KEY_W))
+        if (IsKeyDown(KEY_W))
             playerPos.z -= 1 * GetFrameTime() * 5;
-        if (IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_S))
+        if (IsKeyDown(KEY_A))
+            playerPos.x -= 1 * GetFrameTime() * 5;
+        if (IsKeyDown(KEY_S))
             playerPos.z += 1 * GetFrameTime() * 5;
+        if (IsKeyDown(KEY_D))
+            playerPos.x += 1 * GetFrameTime() * 5;
 
+        // CAMERA_THIRD_PERSON comes with wasd and move input handling by default
+        // So instead of the camera following the player, we can make make the
+        // player follow the camera since it can move around by itself
         UpdateCamera(&camera, CAMERA_THIRD_PERSON);
-        camera.target = playerPos;
+
+        // The player position is basically where the camera is looking at
+        playerPos = camera.target;
 
         BeginDrawing();
         {
@@ -54,7 +59,7 @@ int main(void) {
             BeginMode3D(camera);
             {
                 DrawCube(playerPos, 2, 2, 2, WHITE);
-                DrawGrid(10, 1.0f);
+                DrawGrid(1000, 1.0f);
             }
             EndMode3D();
             DrawText("Welcome back partner!", 190, 200, 20, LIGHTGRAY);
