@@ -65,9 +65,7 @@ int main(void) {
             ClearBackground(DARKPURPLE);
             BeginMode3D(camera);
             {
-                // enemy
-                DrawCubeV({}, playerSize, RED);
-                // player
+                DrawCubeV({0.0f, 1.0f, 0.0f}, playerSize, RED);
                 DrawCube(playerPos, 2, 2, 2, WHITE);
                 DrawGrid(1000, 1.0f);
             }
